@@ -1,0 +1,36 @@
+name: Stable builds
+
+on:
+  push:
+    paths:
+    - '*.c'
+    - '*.h'
+
+jobs:
+  build:
+    name: Debian
+    runs-on: docker://debian:8
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Configure
+        run: |
+          mkdir -p build && cd $_
+          cmake \
+            -Wno-dev \
+            -DCTESTS=${TESTS:-ON} \
+            -DCOVERALLS=${COVERAGE:-OFF} \
+            -DCMAKE_BUILD_TYPE=${CONFIGURATION} \
+            -DCMAKE_INSTALL_PREFIX=criterion-${TRAVIS_TAG} \
+            ${CMAKE_OPTS} \
+            ..
+
+      - name: Make
+        run: make -j4
+
+      - name: Test
+        run: |
+          make criterion_tests -j4
+          ctest --output-on-failure -j4 --timeout=20
