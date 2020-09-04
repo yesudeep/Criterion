@@ -1,0 +1,42 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("//:defs.bzl", "CRITERION_DEFINES_COMMON", "CRITERION_DEFINES_UNIX", "CRITERION_DEFINES_WINDOWS")
+
+cc_library(
+    name = "mutex",
+    srcs = ["mutex.c"],
+    defines = select({
+        "//:platform_windows": CRITERION_DEFINES_WINDOWS,
+        "//conditions:default": CRITERION_DEFINES_UNIX,
+    }),
+    visibility = ["//visibility:public"],
+    hdrs = ["mutex.h"],
+)
+
+cc_library(
+    name = "err",
+    srcs = ["err.c"],
+    defines = select({
+        "//:platform_windows": CRITERION_DEFINES_WINDOWS,
+        "//conditions:default": CRITERION_DEFINES_UNIX,
+    }),
+    visibility = ["//visibility:public"],
+    hdrs = ["err.h"],
+    deps = [
+        ":common",
+    ],
+)
+
+cc_library(
+    name = "common",
+    defines = select({
+        "//:platform_windows": CRITERION_DEFINES_WINDOWS,
+        "//conditions:default": CRITERION_DEFINES_UNIX,
+    }),
+    visibility = ["//visibility:public"],
+    hdrs = [
+        "common.h",
+    ],
+    deps = [
+        "//:includes",
+    ],
+)

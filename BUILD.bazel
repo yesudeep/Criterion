@@ -1,0 +1,102 @@
+package(default_visibility = ["//visibility:public"])
+
+load("//:defs.bzl", "CRITERION_DEFINES_COMMON", "CRITERION_DEFINES_UNIX", "CRITERION_DEFINES_WINDOWS")
+
+config_setting(
+    name = "platform_freebsd",
+    constraint_values = [
+        "@platforms//os:freebsd",
+    ],
+)
+
+config_setting(
+    name = "platform_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "platform_macos",
+    constraint_values = [
+        "@platforms//os:macos",
+    ],
+)
+
+config_setting(
+    name = "platform_windows",
+    constraint_values = [
+        "@platforms//os:windows",
+    ],
+)
+
+config_setting(
+    name = "platform_ios",
+    constraint_values = [
+        "@platforms//os:ios",
+    ],
+)
+
+config_setting(
+    name = "platform_android",
+    constraint_values = [
+        "@platforms//os:android",
+    ],
+)
+
+CRITERION_HEADERS = [
+    "include/criterion/abort.h",
+    "include/criterion/alloc.h",
+    "include/criterion/assert.h",
+    "include/criterion/criterion.h",
+    "include/criterion/embedded.h",
+    "include/criterion/event.h",
+    "include/criterion/hooks.h",
+    "include/criterion/logging.h",
+    "include/criterion/options.h",
+    "include/criterion/output.h",
+    "include/criterion/parameterized.h",
+    "include/criterion/redirect.h",
+    "include/criterion/stats.h",
+    "include/criterion/theories.h",
+    "include/criterion/types.h",
+    "include/criterion/new/assert.h",
+    "include/criterion/new/memory.h",
+    "include/criterion/new/stream.h",
+    "include/criterion/internal/asprintf-compat.h",
+    "include/criterion/internal/assert.h",
+    "include/criterion/internal/capabilities.h",
+    "include/criterion/internal/common.h",
+    "include/criterion/internal/deprecation.h",
+    "include/criterion/internal/designated-initializer-compat.h",
+    "include/criterion/internal/hooks.h",
+    "include/criterion/internal/new_asserts.h",
+    "include/criterion/internal/ordered-set.h",
+    "include/criterion/internal/parameterized.h",
+    "include/criterion/internal/preprocess.h",
+    "include/criterion/internal/redirect.h",
+    "include/criterion/internal/stdio_filebuf.hxx",
+    "include/criterion/internal/test.h",
+    "include/criterion/internal/theories.h",
+    "include/criterion/internal/assert/complex.h",
+    "include/criterion/internal/assert/exceptions.h",
+    "include/criterion/internal/assert/ieee.h",
+    "include/criterion/internal/assert/memory.h",
+    "include/criterion/internal/assert/op.h",
+    "include/criterion/internal/assert/op.hxx",
+    "include/criterion/internal/assert/stream.h",
+    "include/criterion/internal/assert/tag.h",
+    "include/criterion/internal/assert/tostr.h",
+    "include/criterion/internal/assert/types.h",
+]
+
+cc_library(
+    name = "includes",
+    hdrs = CRITERION_HEADERS,
+    defines = select({
+        "//:platform_windows": CRITERION_DEFINES_WINDOWS,
+        "//conditions:default": CRITERION_DEFINES_UNIX,
+    }),
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)

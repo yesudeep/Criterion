@@ -24,7 +24,9 @@
 #ifndef MUTEX_H_
 #define MUTEX_H_
 
-#include "config.h"
+#if !defined (HAVE_BAZEL_BUILD)
+# include "config.h"
+#endif // !HAVE_BAZEL_BUILD
 
 #if __STDC_VERSION__ >= 201112 && !defined __STDC_NO_THREADS__
 # define tls    _Thread_local
